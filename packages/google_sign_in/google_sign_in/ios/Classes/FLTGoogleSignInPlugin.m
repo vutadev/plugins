@@ -19,6 +19,7 @@ static NSString *const kErrorReasonSignInRequired = @"sign_in_required";
 static NSString *const kErrorReasonSignInCanceled = @"sign_in_canceled";
 static NSString *const kErrorReasonNetworkError = @"network_error";
 static NSString *const kErrorReasonSignInFailed = @"sign_in_failed";
+static FlutterResult AccountRequest;
 
 static FlutterError *getFlutterError(NSError *error) {
   NSString *errorCode;
@@ -44,7 +45,6 @@ static FlutterError *getFlutterError(NSError *error) {
 @end
 
 @implementation FLTGoogleSignInPlugin {
-  static FlutterResult AccountRequest;
   NSArray<NSString *> *_additionalScopesRequest;
 }
 
