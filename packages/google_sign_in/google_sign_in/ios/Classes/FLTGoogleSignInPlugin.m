@@ -44,7 +44,7 @@ static FlutterError *getFlutterError(NSError *error) {
 @end
 
 @implementation FLTGoogleSignInPlugin {
-  FlutterResult _accountRequest;
+  static FlutterResult AccountRequest;
   NSArray<NSString *> *_additionalScopesRequest;
 }
 
@@ -187,13 +187,13 @@ static FlutterError *getFlutterError(NSError *error) {
 }
 
 - (BOOL)setAccountRequest:(FlutterResult)request {
-  if (_accountRequest != nil) {
+  if (AccountRequest != nil) {
     request([FlutterError errorWithCode:@"concurrent-requests"
                                 message:@"Concurrent requests to account signin"
                                 details:nil]);
     return NO;
   }
-  _accountRequest = request;
+  AccountRequest = request;
   return YES;
 }
 
@@ -232,8 +232,8 @@ static FlutterError *getFlutterError(NSError *error) {
           break;
         }
       }
-      _accountRequest(@(granted));
-      _accountRequest = nil;
+      AccountRequest(@(granted));
+      AccountRequest = nil;
       _additionalScopesRequest = nil;
       return;
     } else {
@@ -264,8 +264,8 @@ static FlutterError *getFlutterError(NSError *error) {
 #pragma mark - private methods
 
 - (void)respondWithAccount:(NSDictionary<NSString *, id> *)account error:(NSError *)error {
-  FlutterResult result = _accountRequest;
-  _accountRequest = nil;
+  FlutterResult result = AccountRequest;
+  AccountRequest = nil;
   result(error != nil ? getFlutterError(error) : account);
 }
 
